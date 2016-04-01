@@ -1,0 +1,14 @@
+set gui=none
+
+noremap j 5j
+noremap k 5k
+noremap h gT
+noremap l gt
+inoremap jk <Esc>
+inoremap <C-x>j: <Down>
+set noscrollbars
+set editor='C:\\Program\ Files\ (x86)\\Vim\\vim74\\gvim.exe'\ -f\ --remote-tab-silent
+set editor='C:\\Program\ Files\ (x86)\\Vim\\vim74\\gvim.exe'
+source! "H:\\_vimperatorrc.local"
+
+" vim: set ft=vimperator:
