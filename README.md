@@ -1,4 +1,8 @@
-my_vimrc
+Config Files
 ========
 
-My VIMRC file
+Ian's configuration files
+vi
+vimperator
+i3
+bash
