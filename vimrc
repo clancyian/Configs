@@ -4,24 +4,26 @@ filetype off                   " required!
 " Set classpath files for Java
 " au BufNewFile,BufRead .classpath set filetype=java
 
-set rtp+=$HOME/vimfiles/bundle/vundle
+set rtp+=$HOME/.vim/bundle/vundle
 call vundle#begin()
 
 " let Vundle manage Vundle
-Bundle 'gmarik/vundle'
-
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
-Bundle 'bling/vim-airline'
-Bundle 'tpope/vim-surround'
-Bundle 'xolox/vim-misc'
-Bundle 'xolox/vim-session'
-Bundle 'ctrlpvim/ctrlp.vim'
-Bundle 'vim-scripts/indentpython.vim'
+Plugin 'gmarik/vundle'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'scrooloose/syntastic'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-surround'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-session'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'vim-scripts/indentpython.vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tmhedberg/SimpylFold'
-Bundle 'vimwiki/vimwiki'
+Plugin 'vimwiki/vimwiki'
+Plugin 'pprovost/vim-ps1'
+Plugin 'tell-k/vim-autopep8'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -36,8 +38,8 @@ set shiftwidth=4 "Number of spaces to use for each step of (auto)indent"
 set keywordprg=perldoc\ -f
 
 map <F2> <ESC>:NERDTreeToggle<RETURN>
-map <F3> <ESC>:NERDTree c:\working<RETURN>
-map <F4> <ESC>:NERDTree c:\<RETURN>
+map <F3> <ESC>:NERDTree c:\<RETURN>
+map <F4> <ESC>:NERDTree c:\working<RETURN>
 map <F5> <ESC>:NERDTree h:\<RETURN>
 
 :au Filetype perl nmap <F6> :%!perltidy -b -bext='/' %<CR>
@@ -59,10 +61,6 @@ set foldenable
 "set foldlevel_start  = 1
 let perl_fold       = 1
 
-nnoremap ; :
-"nnoremap : ;
-
-" Smart way to move between windows
 map <leader>j <C-W>j
 map <leader>k <C-W>k
 map <leader>h <C-W>h
@@ -86,14 +84,22 @@ nmap <right> :3wincmd ><cr>
 nmap <up>    :3wincmd +<cr>
 nmap <down>  :3wincmd -<cr>
 
+" Shortcuts
 nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
+nnoremap ; :
+"nnoremap : ;
+nnoremap ,t <Esc>:tabnew<CR>
 
+" Smart way to move between windows
 " Session Settings
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
 
 " Ignore swap error messages
 set shortmess+=A
+
+" Set clipboard for windows
+set clipboard=unnamed
 
 " Toggle between relative and absolute numbers
 function! NumberToggle()
@@ -114,13 +120,13 @@ set hidden
 
 " Settings for python
 au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
-    \ set fileformat=unix
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix |
 
 " Fold settings for Python
 autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
