@@ -24,6 +24,7 @@ Plugin 'tmhedberg/SimpylFold'
 Plugin 'vimwiki/vimwiki'
 Plugin 'pprovost/vim-ps1'
 Plugin 'tell-k/vim-autopep8'
+Plugin 'Yggdroot/indentLine' " Show line indentation
 
 call vundle#end()            " required
 filetype plugin indent on    " required
