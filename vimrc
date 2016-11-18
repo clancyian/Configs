@@ -89,7 +89,7 @@ if has("gui_win32")
     colorscheme solarized
     set guioptions-=m " Removes unneeded menu's
     set guioptions-=T
-    set clipboard=unname " Set clipboard for windowsd
+    set clipboard=unnamed " Set clipboard for windows
 else
     " Settings for airline
     set t_Co=256
