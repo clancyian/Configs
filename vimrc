@@ -1,8 +1,6 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
-
-" Set classpath files for Java
-" au BufNewFile,BufRead .classpath set filetype=java
+syntax enable
 
 set rtp+=$HOME/.vim/bundle/vundle
 call vundle#begin()
@@ -25,53 +23,52 @@ Plugin 'vimwiki/vimwiki'
 Plugin 'pprovost/vim-ps1'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'Yggdroot/indentLine' " Show line indentation
+Plugin 'Chiel92/vim-autoformat'
+Plugin 'Valloric/YouCompleteMe' " Code completion tool
+
+if has("gui_win32")
+    " Place Windows specific plugins here 
+else
+    Plugin 'christoomey/vim-tmux-navigator' " tmux integration
+endif
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-inoremap jk <Esc>
-set guioptions-=m
-set guioptions-=T
+""" General settings
 set autoindent   "Always set auto-indenting on"
 set expandtab    "Insert spaces instead of tabs in insert mode. Use spaces for indents"
 set tabstop=4    "Number of spaces that a <Tab> in the file counts for"
 set shiftwidth=4 "Number of spaces to use for each step of (auto)indent"
-set keywordprg=perldoc\ -f
-
-map <F2> <ESC>:NERDTreeToggle<RETURN>
-map <F3> <ESC>:NERDTree c:\<RETURN>
-map <F4> <ESC>:NERDTree c:\working<RETURN>
-map <F5> <ESC>:NERDTree h:\<RETURN>
-
-:au Filetype perl nmap <F6> :%!perltidy -b -bext='/' %<CR>
-syntax enable
-set background=light
-colorscheme solarized
-
-let g:syntastic_enable_perl_checker = 1
-let g:syntastic_perl_checkers=['perl']
-let g:syntastic_perl_lib_path = [ 'c:\sfms\lib' ]
-
-let perl_include_pod   = 1    "include pod.vim syntax file with perl.vim"
-let perl_extended_vars = 1    "highlight complex expressions such as @{[$x, $y]}"
-let perl_sync_dist     = 250  "use more context for highlighting"
-
-"folding settings"
 set foldenable
-"set foldmethod      = syntax
-"set foldlevel_start  = 1
-let perl_fold       = 1
+set hidden " So you don't have to write when hiding a buffer
+set shortmess+=A " Ignore swap error messages
 
-map <leader>j <C-W>j
-map <leader>k <C-W>k
-map <leader>h <C-W>h
-map <leader>l <C-W>l
-map <leader>_ <C-W>_
-map <leader>= <C-W>=
+""" General Key bindings
+inoremap jk <Esc>
+map <F2> <ESC>:NERDTreeToggle<RETURN>
 
 " Open a new buffer
 map <leader>n <C-W>n
 map <leader>v <C-W>v
+
+" Shortcuts
+nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
+nnoremap ; :
+nnoremap ,t <Esc>:tabnew<CR>
+
+
+""" Movement tweaks
+
+if has("gui_win32")
+    map <C-j> <C-W>j
+    map <C-k> <C-W>k
+    map <C-h> <C-W>h
+    map <C-l> <C-W>l
+endif
+
+map <leader>_ <C-W>_
+map <leader>= <C-W>=
 
 " Moving
 map <leader>H              :wincmd H<cr>
@@ -85,22 +82,55 @@ nmap <right> :3wincmd ><cr>
 nmap <up>    :3wincmd +<cr>
 nmap <down>  :3wincmd -<cr>
 
-" Shortcuts
-nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
-nnoremap ; :
-"nnoremap : ;
-nnoremap ,t <Esc>:tabnew<CR>
+""" Windows GUI settings
+if has("gui_win32")
+    map <F3> <ESC>:NERDTree h:\<RETURN>
+    set background=light
+    colorscheme solarized
+    set guioptions-=m " Removes unneeded menu's
+    set guioptions-=T
+    set clipboard=unname " Set clipboard for windowsd
+else
+    " Settings for airline
+    set t_Co=256
+endif
 
-" Smart way to move between windows
-" Session Settings
+""" Perl specific settings
+:au Filetype perl nmap <F6> :%!perltidy -b -bext='/' %<CR>
+
+let g:syntastic_enable_perl_checker = 1
+let g:syntastic_perl_checkers=['perl']
+"let g:syntastic_perl_lib_path = [ 'c:\sfms\lib' ]
+let perl_include_pod   = 1    "include pod.vim syntax file with perl.vim"
+let perl_extended_vars = 1    "highlight complex expressions such as @{[$x, $y]}"
+let perl_sync_dist     = 250  "use more context for highlighting"
+let perl_fold       = 1
+
+""" Settings for python
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix |
+
+" Fold settings for Python
+autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+
+let python_highlight_all=1
+
+" Flag unnecessary whitespace
+" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+""" Java Settings
+" au BufNewFile,BufRead .classpath set filetype=java
+
+""" Session Settings
 let g:session_autosave = 'no'
 let g:session_autoload = 'no'
-
-" Ignore swap error messages
-set shortmess+=A
-
-" Set clipboard for windows
-set clipboard=unnamed
 
 " Toggle between relative and absolute numbers
 function! NumberToggle()
@@ -116,27 +146,3 @@ endfunc
 
 nnoremap <C-n> :call NumberToggle()<cr>
 
-" So you don't have to write when hiding a buffer
-set hidden
-
-" Settings for python
-au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set textwidth=79 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix |
-
-" Fold settings for Python
-autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
-autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
-
-" Flag unnecessary whitespace
-" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-let python_highlight_all=1
-" syntax on
-
-filetype plugin indent on
