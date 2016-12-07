@@ -1,8 +1,11 @@
+" Ian's vim config
+" Save as ~/.config/nvim/init.vim for nvim
+
 set nocompatible               " be iMproved
 filetype off                   " required!
 syntax enable
 
-set rtp+=$HOME/.vim/bundle/vundle
+set rtp+=$HOME/.nvim/bundle/Vundle.vim
 call vundle#begin()
 
 " let Vundle manage Vundle
@@ -23,7 +26,7 @@ Plugin 'vimwiki/vimwiki'
 Plugin 'pprovost/vim-ps1'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'Yggdroot/indentLine' " Show line indentation
-Plugin 'Chiel92/vim-autoformat'
+Plugin 'Chiel92/vim-autoformat' " Multi Language autoformat tool
 Plugin 'Valloric/YouCompleteMe' " Code completion tool
 
 if has("gui_win32")
@@ -47,6 +50,7 @@ set shortmess+=A " Ignore swap error messages
 """ General Key bindings
 inoremap jk <Esc>
 map <F2> <ESC>:NERDTreeToggle<RETURN>
+nnoremap <F6> :Autoformat<CR>
 
 " Open a new buffer
 map <leader>n <C-W>n
@@ -93,7 +97,11 @@ if has("gui_win32")
 else
     " Settings for airline
     set t_Co=256
+    set clipboard+=unnamedplus " Set clipboard for windows
 endif
+
+    " setting for CtrlP
+    let g:ctrlp_cmd = 'CtrlPBuffer'    
 
 """ Perl specific settings
 :au Filetype perl nmap <F6> :%!perltidy -b -bext='/' %<CR>
@@ -107,6 +115,12 @@ let perl_sync_dist     = 250  "use more context for highlighting"
 let perl_fold       = 1
 
 """ Settings for python
+
+let g:python_host_prog = '/home/ian/miniconda2/envs/vpython2/bin/python'
+let g:python3_host_prog = '/home/ian/miniconda2/envs/nvimpy/bin/python'
+
+autocmd FileType python map <buffer> <F3> : call Flake8()<CR>
+
 au BufNewFile,BufRead *.py
     \ set tabstop=4 |
     \ set softtabstop=4 |
