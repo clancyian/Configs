@@ -6,7 +6,7 @@ syntax enable
 if has("gui_win32")
     set rtp+=$HOME/.vim/bundle/vundle
 else
-    "set rtp+=$HOME/.nvim/bundle/Vundle.vim
+    set rtp+=$HOME/.nvim/bundle/Vundle.vim
 endif
 
 call vundle#begin()
