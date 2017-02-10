@@ -1,6 +1,3 @@
-" Ian's vim config
-" Save as ~/.config/nvim/init.vim for nvim
-
 set nocompatible               " be iMproved
 filetype off                   " required!
 syntax enable
@@ -27,7 +24,9 @@ Plugin 'pprovost/vim-ps1'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'Yggdroot/indentLine' " Show line indentation
 Plugin 'Chiel92/vim-autoformat' " Multi Language autoformat tool
-Plugin 'Valloric/YouCompleteMe' " Code completion tool
+"Plugin 'Valloric/YouCompleteMe' " Code completion tool
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'zchee/deoplete-jedi'
 
 if has("gui_win32")
     " Place Windows specific plugins here 
@@ -160,3 +159,5 @@ endfunc
 
 nnoremap <C-n> :call NumberToggle()<cr>
 
+" Enable Deoplete
+let g:deoplete#enable_at_startup = 1
