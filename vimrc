@@ -2,7 +2,13 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 syntax enable
 
-set rtp+=$HOME/.nvim/bundle/Vundle.vim
+" gvim on Windows, nvim on Linux
+if has("gui_win32")
+    set rtp+=$HOME/.vim/bundle/vundle
+else
+    "set rtp+=$HOME/.nvim/bundle/Vundle.vim
+endif
+
 call vundle#begin()
 
 " let Vundle manage Vundle
@@ -24,14 +30,14 @@ Plugin 'pprovost/vim-ps1'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'Yggdroot/indentLine' " Show line indentation
 Plugin 'Chiel92/vim-autoformat' " Multi Language autoformat tool
-"Plugin 'Valloric/YouCompleteMe' " Code completion tool
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'zchee/deoplete-jedi'
 
 if has("gui_win32")
     " Place Windows specific plugins here 
+    Plugin 'davidhalter/jedi-vim.git' " Needs python35 32 bit installed
 else
     Plugin 'christoomey/vim-tmux-navigator' " tmux integration
+    Plugin 'Shougo/deoplete.nvim'
+    Plugin 'zchee/deoplete-jedi'
 endif
 
 call vundle#end()            " required
