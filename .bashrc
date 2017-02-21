@@ -15,12 +15,10 @@ stty -ixon
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
 
-# append to the history file, don't overwrite it
-shopt -s histappend
-
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 # record history
 shopt -s histappend
+shopt -s histverify
 HISTSIZE=100000
 HISTFILESIZE=100000
 PROMPT_COMMAND='history -a'
@@ -127,7 +125,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
-HTTP_PROXY="http://:3128"
-HTTPS_PROXY="http://:3128"
+HTTP_PROXY="http://10.107.1.24:3128"
+HTTPS_PROXY="http://10.107.1.24:3128"
 export HTTP_PROXY
 export HTTPS_PROXY
+
+# Miniconda
+export PATH="/home/ian/miniconda2/bin:$PATH"
