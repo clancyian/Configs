@@ -9,11 +9,14 @@ case $- in
 esac
 
 # Prevent Ctrl-S from locking the terminal
-stty -ixon
+[[ $- == *i* ]] && stty -ixon
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
+
+# Unique history file for each machine
+export HISTFILE="${HOME}/.bash_history.`hostname`"
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 # record history
@@ -125,10 +128,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
-HTTP_PROXY="http://10.107.1.24:3128"
-HTTPS_PROXY="http://10.107.1.24:3128"
-export HTTP_PROXY
-export HTTPS_PROXY
-
 # Miniconda
 export PATH="/home/ian/miniconda2/bin:$PATH"
+
+rmd () {
+	pandoc $1 | lynx -stdin
+}
