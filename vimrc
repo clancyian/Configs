@@ -30,10 +30,10 @@ Plugin 'pprovost/vim-ps1'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'Yggdroot/indentLine' " Show line indentation
 Plugin 'Chiel92/vim-autoformat' " Multi Language autoformat tool
-Plugin 'python-mode/python-mode.git' " Suite of tools to support python development 
+Plugin 'python-mode/python-mode.git' " Suite of tools to support python development
 
 if has("gui_win32")
-    " Place Windows specific plugins here 
+    " Place Windows specific plugins here
     Plugin 'davidhalter/jedi-vim.git' " Needs python35 32 bit installed
 else
     Plugin 'christoomey/vim-tmux-navigator' " tmux integration
@@ -107,14 +107,14 @@ else
 endif
 
     " setting for CtrlP
-    let g:ctrlp_cmd = 'CtrlPBuffer'    
+    let g:ctrlp_cmd = 'CtrlPBuffer'
 
 """ Perl specific settings
 :au Filetype perl nmap <F6> :%!perltidy -b -bext='/' %<CR>
 
 let g:syntastic_enable_perl_checker = 1
 let g:syntastic_perl_checkers=['perl']
-"let g:syntastic_perl_lib_path = [ 'c:\sfms\lib' ]
+"let g:syntastic_perl_lib_path = [ 'put additional perl libraries here' ]
 let perl_include_pod   = 1    "include pod.vim syntax file with perl.vim"
 let perl_extended_vars = 1    "highlight complex expressions such as @{[$x, $y]}"
 let perl_sync_dist     = 250  "use more context for highlighting"
@@ -144,6 +144,8 @@ let python_highlight_all=1
 
 " Python-mode plugin settings
 
+let g:pymode = 1 " Turn on/off 
+
 let g:pymode_rope = 0 " Use deoplete
 
 " Documentation
@@ -160,16 +162,16 @@ let g:pymode_lint_write = 0
 let g:pymode_virtualenv = 0
 
 " Enable breakpoints plugin
-let g:pymode_breakpoint = 0
+let g:pymode_breakpoint = 1
 let g:pymode_breakpoint_bind = '<leader>b'
 
-" syntax highlighting
+" syntax highlighting (using Syntastic)
 let g:pymode_syntax = 0
 let g:pymode_syntax_all = 0
 let g:pymode_syntax_indent_errors = g:pymode_syntax_all
 let g:pymode_syntax_space_errors = g:pymode_syntax_all
 
-" Don't autofold code
+" Don't autofold code with pymode
 let g:pymode_folding = 0
 
 " Flag unnecessary whitespace
@@ -177,6 +179,11 @@ let g:pymode_folding = 0
 
 """ Java Settings
 " au BufNewFile,BufRead .classpath set filetype=java
+
+""" Protobuf syntax
+augroup filetype
+    au! BufRead,BufNewFile *.proto* setfiletype proto
+augroup end
 
 """ Session Settings
 let g:session_autosave = 'no'
@@ -190,7 +197,7 @@ function! NumberToggle()
   elseif((&relativenumber == 0) && (&number == 1))
     set rnu
   else
-    set nu      
+    set nu
   endif
 endfunc
 
