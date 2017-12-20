@@ -92,17 +92,34 @@ if [ -x /usr/bin/dircolors ]; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+    # To get the correct colors in TMUX
+    alias tmux='tmux -2'
 fi
 
 eval `dircolors ~/.dir_colors/dircolors`
 
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# alias for clipboard
+alias cb='xclip -selection clipboard'
+
+# quick history search
+function SearchBashHistory()
+{
+if [ $# -ne 1 ]
+  then
+    echo "Incorrect number of arguments supplied"
+  else
+    history | grep $1
+fi
+}
+alias gh=SearchBashHistory
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
