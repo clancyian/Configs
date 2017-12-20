@@ -17,6 +17,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'scrooloose/syntastic'
 Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'tpope/vim-surround'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
@@ -24,13 +25,15 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
-Plugin 'tmhedberg/SimpylFold'
+"Plugin 'tmhedberg/SimpylFold'
 Plugin 'vimwiki/vimwiki'
 Plugin 'pprovost/vim-ps1'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'Yggdroot/indentLine' " Show line indentation
 Plugin 'Chiel92/vim-autoformat' " Multi Language autoformat tool
 Plugin 'python-mode/python-mode.git' " Suite of tools to support python development
+Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'roryokane/detectindent' " Automatically detect and set indentation
 
 if has("gui_win32")
     " Place Windows specific plugins here
@@ -39,6 +42,25 @@ else
     Plugin 'christoomey/vim-tmux-navigator' " tmux integration
     Plugin 'Shougo/deoplete.nvim'
     Plugin 'zchee/deoplete-jedi'
+    Plugin 'hkupty/iron.nvim'
+
+    " Enable Deoplete
+    let g:deoplete#enable_at_startup = 1
+
+    " deoplete tab-complete
+    inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+    inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
+
+    " <C-h>, <BS>: close popup and delete backword char.
+	inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
+
+    " Iron movement mappings
+    :tnoremap <C-h> <C-\><C-N><C-w>h
+    :tnoremap <C-j> <C-\><C-N><C-w>j
+    :tnoremap <C-k> <C-\><C-N><C-w>k
+    :tnoremap <C-l> <C-\><C-N><C-w>l
+
 endif
 
 call vundle#end()            " required
@@ -92,22 +114,56 @@ nmap <right> :3wincmd ><cr>
 nmap <up>    :3wincmd +<cr>
 nmap <down>  :3wincmd -<cr>
 
+" Solarized
+colorscheme solarized
+
 """ Windows GUI settings
 if has("gui_win32")
     map <F3> <ESC>:NERDTree h:\<RETURN>
     set background=light
-    colorscheme solarized
     set guioptions-=m " Removes unneeded menu's
     set guioptions-=T
     set clipboard=unnamed " Set clipboard for windows
 else
+
+    set background=dark
+
+    " Special settings for tmux
+    if exists('$TMUX')
+        "set termguicolors " Setting this fixes powerline but breaks colorscheme
+        let g:airline_powerline_fonts = 1 " Setting to 1 breaks colorscheme in python
+    endif
+
     " Settings for airline
     set t_Co=256
     set clipboard+=unnamedplus " Set clipboard for windows
+    let airline_solarized_bg = 'dark'
+    let g:airline_theme= 'solarized'
+    if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+    endif
+
+    " unicode symbols
+    "let g:airline_symbols.linenr = '␊'
+    "let g:airline_symbols.linenr = '␤'
+    "let g:airline_symbols.linenr = '¶'
+    "let g:airline_symbols.paste = 'ρ'
+    "let g:airline_symbols.paste = 'Þ'
+    "let g:airline_symbols.paste = '∥'
+    "let g:airline_symbols.whitespace = 'Ξ'
+
+    " airline symbols
+    let g:airline_left_sep = ''
+    let g:airline_left_alt_sep = ''
+    let g:airline_right_sep = ''
+    let g:airline_right_alt_sep = ''
+    let g:airline_symbols.branch = ''
+    let g:airline_symbols.readonly = ''
+    let g:airline_symbols.linenr = ''
 endif
 
-    " setting for CtrlP
-    let g:ctrlp_cmd = 'CtrlPBuffer'
+" setting for CtrlP
+let g:ctrlp_cmd = 'CtrlPBuffer'
 
 """ Perl specific settings
 :au Filetype perl nmap <F6> :%!perltidy -b -bext='/' %<CR>
@@ -128,23 +184,26 @@ let g:python3_host_prog = '/home/ian/miniconda2/envs/nvimpy/bin/python'
 autocmd FileType python map <buffer> <F3> : call Flake8()<CR>
 
 au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set textwidth=120 |
+    \ set textwidth=99 |
     \ set expandtab |
     \ set autoindent |
     \ set fileformat=unix |
 
+
+" Enable indentation autodetect
+let g:detectindent_autodetect = 1
+
 " Fold settings for Python
-autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
-autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+" Currently Disabled. Not sure if it works with nvim
+"autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+autocmd BufWinEnter *.py setlocal foldmethod=indent foldnestmax=2
+"autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
 
 let python_highlight_all=1
 
 " Python-mode plugin settings
 
-let g:pymode = 1 " Turn on/off 
+let g:pymode = 1 " Turn on/off
 
 let g:pymode_rope = 0 " Use deoplete
 
@@ -165,13 +224,13 @@ let g:pymode_virtualenv = 0
 let g:pymode_breakpoint = 1
 let g:pymode_breakpoint_bind = '<leader>b'
 
-" syntax highlighting (using Syntastic)
+" Disable syntax highlighting (using Syntastic)
 let g:pymode_syntax = 0
 let g:pymode_syntax_all = 0
 let g:pymode_syntax_indent_errors = g:pymode_syntax_all
 let g:pymode_syntax_space_errors = g:pymode_syntax_all
 
-" Don't autofold code with pymode
+" Autofold code with pymode
 let g:pymode_folding = 0
 
 " Flag unnecessary whitespace
@@ -203,5 +262,3 @@ endfunc
 
 nnoremap <C-n> :call NumberToggle()<cr>
 
-" Enable Deoplete
-let g:deoplete#enable_at_startup = 1
