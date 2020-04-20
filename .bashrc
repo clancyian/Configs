@@ -28,6 +28,8 @@ PROMPT_COMMAND='history -a'
 
 # vi mode
 set -o vi
+# Escape keys to jk
+bind '"jk":vi-movement-mode'
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -151,3 +153,5 @@ export PATH="/home/ian/miniconda2/bin:$PATH"
 rmd () {
 	pandoc $1 | lynx -stdin
 }
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
